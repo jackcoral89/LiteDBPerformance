@@ -22,30 +22,31 @@ namespace LiteDBPerformanceTester
             var seg = Math.Round(test.Count / sw.Elapsed.TotalSeconds).ToString().PadLeft(8, ' ');
 
             Console.WriteLine(name.PadRight(15, ' ') + ": " +
-                time + " ms - " +
-                seg + " records/second");
+                              time + " ms - " +
+                              seg + " records/second");
         }
 
-        public static IEnumerable<BsonDocument> GetDocs(int count)
+        public static IEnumerable<TestDoc> GetDocs(int count)
         {
             for (var i = 0; i < count; i++)
             {
-                yield return new BsonDocument
+                yield return new TestDoc
                 {
-                    { "_id", i },
-                    { "name", Guid.NewGuid().ToString() },
-                    { "lorem", LoremIpsum(3, 5, 2, 3, 3) }
+                    Name = Guid.NewGuid().ToString(),
+                    LongText = LoremIpsum(3,10,2,10,5)
                 };
             }
         }
 
-        public static string LoremIpsum(int minWords, int maxWords,
-            int minSentences, int maxSentences,
+        private static string LoremIpsum(int minWords, int maxWords, int minSentences, int maxSentences,
             int numParagraphs)
         {
-            var words = new[] { "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer",
+            var words = new[]
+            {
+                "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer",
                 "adipiscing", "elit", "sed", "diam", "nonummy", "nibh", "euismod",
-                "tincidunt", "ut", "laoreet", "dolore", "magna", "aliquam", "erat" };
+                "tincidunt", "ut", "laoreet", "dolore", "magna", "aliquam", "erat"
+            };
 
             var rand = new Random(DateTime.Now.Millisecond);
             var numSentences = rand.Next(maxSentences - minSentences) + minSentences + 1;
@@ -59,15 +60,30 @@ namespace LiteDBPerformanceTester
                 {
                     for (int w = 0; w < numWords; w++)
                     {
-                        if (w > 0) { result.Append(" "); }
+                        if (w > 0)
+                        {
+                            result.Append(" ");
+                        }
+
                         result.Append(words[rand.Next(words.Length)]);
                     }
+
                     result.Append(". ");
                 }
+
                 result.AppendLine();
             }
 
             return result.ToString();
+        }
+
+        public class TestDoc
+        {
+            public int Id { get; set; }
+            
+            public string Name { get; set; }
+            
+            public string LongText { get; set; }
         }
     }
 }

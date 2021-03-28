@@ -6,10 +6,9 @@ namespace LiteDBPerformanceTester
     {
         static void Main(string[] args)
         {
-            RunTest("LiteDB: default", new LiteDB_Test(5000, null, new FileOptions { Journal = true, FileMode = FileOpenMode.Shared }));
-            RunTest("LiteDB: encrypted", new LiteDB_Test(5000, "mypass", new FileOptions { Journal = true, FileMode = FileOpenMode.Shared }));
-            RunTest("LiteDB: exclusive no journal", new LiteDB_Test(5000, null, new FileOptions { Journal = false, FileMode = FileOpenMode.Exclusive }));
-
+            RunTest("LiteDB: default", new LiteDBTest(5000, string.Empty));
+            RunTest("LiteDB: encrypted", new LiteDBTest(5000, "pa44w0rd"));
+            
             Console.ReadKey();
         }
 
@@ -29,12 +28,11 @@ namespace LiteDBPerformanceTester
             test.Run("Delete", test.Delete);
             test.Run("Drop", test.Drop);
 
-            Console.WriteLine("File Size     : " + Math.Round((double)test.FileLength / (double)1024, 2).ToString().PadLeft(5, ' ') + " kb");
+            Console.WriteLine("File Size : " + Math.Round((double)test.FileLength / (double)1024, 2).ToString().PadLeft(5, ' ') + " kb");
 
             test.Dispose();
 
             Console.WriteLine();
-
         }
     }
 }

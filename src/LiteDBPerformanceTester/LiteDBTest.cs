@@ -14,73 +14,96 @@ namespace LiteDBPerformanceTester
     public class LiteDBTest : ILiteDBTest
     {
         private string _filename;
-        private LiteEngine _db;
+        private LiteDatabase  _liteDb;
         private int _count;
+        private List<Helper.TestDoc> _docs;
 
         public int Count { get { return _count; } }
         public int FileLength { get { return (int)new FileInfo(_filename).Length; } }
 
-        public LiteDBTest(int count, string password, LiteDB.FileOptions options)
+        public LiteDBTest(int count, string password)
         {
             _count = count;
-            _filename = "dblite-" + Guid.NewGuid().ToString("n") + ".db";
+            _filename = "LiteDB-" + Guid.NewGuid().ToString("n") + ".db";
 
-            var disk = new FileDiskService(_filename, options);
-
-            _db = new LiteEngine(disk, password);
+            if (!string.IsNullOrEmpty(password))
+            {
+                var settings = new EngineSettings { Password = null, Filename = _filename };
+                var db = new LiteEngine(settings);
+                _liteDb = new LiteDatabase(db);   
+            }
+            else
+            {
+                var settings = new EngineSettings { Password = password, Filename = _filename };
+                var db = new LiteEngine(settings);
+                _liteDb = new LiteDatabase(db);   
+            }
         }
 
         public void Prepare()
         {
+            _docs = Helper.GetDocs(_count).ToList();
         }
 
         public void Insert()
         {
-            foreach (var doc in Helper.GetDocs(_count))
+            foreach (var doc in _docs)
             {
-                _db.Insert("col", doc, BsonAutoId.Guid);
+                _liteDb.GetCollection<Helper.TestDoc>().Insert(doc);
             }
         }
 
         public void Bulk()
         {
-            _db.Insert("col_bulk", Helper.GetDocs(_count));
+            var docsNew = new List<Helper.TestDoc>();
+            docsNew = _docs;
+
+            foreach (var item in docsNew)
+            {
+                item.Id += 10000;
+            }
+            
+            _liteDb.GetCollection<Helper.TestDoc>().InsertBulk(docsNew);
         }
 
         public void Update()
         {
-            foreach (var doc in Helper.GetDocs(_count))
+            foreach (var doc in _docs)
             {
-                _db.Update("col", doc);
+                _liteDb.GetCollection<Helper.TestDoc>().Update(doc);
             }
         }
 
         public void CreateIndex()
         {
-            _db.EnsureIndex("col", "name", false);
+            _liteDb.GetCollection<Helper.TestDoc>().EnsureIndex(x => x.Name);
+
         }
 
         public void Query()
         {
             for (var i = 0; i < _count; i++)
             {
-                _db.Find("col", LiteDB.Query.EQ("_id", i)).Single();
+                _liteDb.GetCollection<Helper.TestDoc>().Query().Where(c => c.Id == i + 1).Single();
             }
         }
 
         public void Delete()
         {
-            _db.Delete("col", LiteDB.Query.All());
+            for (var i = 0; i < _count; i++)
+            {
+                _liteDb.GetCollection<Helper.TestDoc>().Delete(i + 1);
+            }
         }
 
         public void Drop()
         {
-            _db.DropCollection("col_bulk");
+            _liteDb.DropCollection("TestDoc");
         }
 
         public void Dispose()
         {
-            _db.Dispose();
+            _liteDb.Dispose();
             File.Delete(_filename);
         }
     }
