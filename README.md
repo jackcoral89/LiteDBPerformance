@@ -3,6 +3,7 @@
 Tested on:
 Surface Book 3 - i7, 32GB Ram
 
+```
 LiteDB: default - 5000 records
 ==============================
 Insert         :  1994 ms -     2507 records/second
@@ -24,3 +25,6 @@ Query          :  1291 ms -     3871 records/second
 Delete         :  2678 ms -     1867 records/second
 Drop           :   113 ms -    44183 records/second
 File Size : 18952 kb
+```
+
+---
