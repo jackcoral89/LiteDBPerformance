@@ -28,3 +28,30 @@ File Size : 11960 kb
 ```
 
 ---
+
+Tested on:
+Desktop Machine: Ryzen 3700X, 16GB Ram
+
+```
+LiteDB: default - 5000 records
+==============================
+Insert         :   734 ms -     6809 records/second
+Bulk           :    58 ms -    85029 records/second
+Update         :   348 ms -    14329 records/second
+CreateIndex    :   186 ms -    26832 records/second
+Query          :   367 ms -    13600 records/second
+Delete         :   997 ms -     5014 records/second
+Drop           :    36 ms -   138843 records/second
+File Size : 11912 kb
+
+LiteDB: encrypted - 5000 records
+================================
+Insert         :  4283 ms -     1167 records/second
+Bulk           :    53 ms -    93968 records/second
+Update         :  1456 ms -     3433 records/second
+CreateIndex    :   427 ms -    11696 records/second
+Query          :   320 ms -    15610 records/second
+Delete         :  9465 ms -      528 records/second
+Drop           :   436 ms -    11453 records/second
+File Size : 11888 kb
+```
