@@ -1,5 +1,11 @@
 # LiteDBPerformance
 
+## How to contribute
+If you want to contribute with your testing environmente, please, fork the project, build the solution and launch the program directly from the file system.
+The debug session with Visual Studio causes a lower perfomances result.
+Copy and paste the results from the console directly in the Readme file.
+
+## Tests
 Tested on:
 Surface Book 3 - i7, 32GB Ram
 
