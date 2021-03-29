@@ -26,7 +26,7 @@ namespace LiteDBPerformanceTester
             _count = count;
             _filename = "LiteDB-" + Guid.NewGuid().ToString("n") + ".db";
 
-            if (!string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(password))
             {
                 var settings = new EngineSettings { Password = null, Filename = _filename };
                 var db = new LiteEngine(settings);
@@ -55,8 +55,7 @@ namespace LiteDBPerformanceTester
 
         public void Bulk()
         {
-            var docsNew = new List<Helper.TestDoc>();
-            docsNew = _docs;
+            var docsNew = _docs;
 
             foreach (var item in docsNew)
             {
@@ -77,7 +76,6 @@ namespace LiteDBPerformanceTester
         public void CreateIndex()
         {
             _liteDb.GetCollection<Helper.TestDoc>().EnsureIndex(x => x.Name);
-
         }
 
         public void Query()
