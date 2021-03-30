@@ -61,3 +61,29 @@ Delete         :  9465 ms -      528 records/second
 Drop           :   436 ms -    11453 records/second
 File Size : 11888 kb
 ```
+
+Tested on:
+MacBook Pro 2.6 GHz 6-Core Intel Core i7 - 16GB
+```
+LiteDB: default - 5000 records
+==============================
+Insert         :   633 ms -     7896 records/second
+Bulk           :    96 ms -    51871 records/second
+Update         :   297 ms -    16809 records/second
+CreateIndex    :   219 ms -    22788 records/second
+Query          :   391 ms -    12781 records/second
+Delete         :   802 ms -     6229 records/second
+Drop           :    10 ms -   457139 records/second
+File Size : 12096 kb
+
+LiteDB: encrypted - 5000 records
+================================
+Insert         :   583 ms -     8566 records/second
+Bulk           :    72 ms -    68793 records/second
+Update         :   380 ms -    13129 records/second
+CreateIndex    :   170 ms -    29309 records/second
+Query          :   440 ms -    11343 records/second
+Delete         :  1010 ms -     4946 records/second
+Drop           :     8 ms -   555648 records/second
+File Size : 11840 kb
+```
